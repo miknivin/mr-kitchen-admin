@@ -59,7 +59,7 @@ export async function POST(
       shipments: [
         {
           name: order.shippingInfo.fullName || "Customer",
-          add: `${order.shippingInfo.address}, Ph: ${order.shippingInfo.phoneNo}`,
+          add: `${order.shippingInfo.address}, ${order.shippingInfo.city}, Ph: ${order.shippingInfo.phoneNo}`,
           pin: order.shippingInfo.zipCode,
           city: order.shippingInfo.city,
           state: order.shippingInfo.state || "Unknown",
