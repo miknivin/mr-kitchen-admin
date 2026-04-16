@@ -7,12 +7,11 @@ import dbConnect from "@/lib/db/connection";
 import Order from "@/models/Order";
 import { createDelhiveryShipment } from "@/utlis/createDelhiveryShipment";
 
-const DELHIVERY_API_TOKEN = process.env.DELHIVERY_API_TOKEN;
-
 export async function POST(
   request: Request,
   { params }: { params: { orderId: string } },
 ) {
+  const DELHIVERY_API_TOKEN = process.env.DELHIVERY_API_TOKEN;
   try {
     await dbConnect();
 
@@ -53,7 +52,7 @@ export async function POST(
       shipments: [
         {
           name: order.shippingInfo.fullName || "Customer",
-          add: order.shippingInfo.address,
+          add: `${order.shippingInfo.address}, Ph: ${order.shippingInfo.phoneNo}`,
           pin: order.shippingInfo.zipCode,
           city: order.shippingInfo.city,
           state: order.shippingInfo.state || "Unknown",
@@ -61,11 +60,11 @@ export async function POST(
           phone: order.shippingInfo.phoneNo,
           order: order._id.toString(),
           payment_mode: order.paymentMethod === "COD" ? "COD" : "Prepaid",
-          return_pin: "678583",
-          return_city: "Thachanattukara",
-          return_phone: "9778766273",
+          return_pin: "673573",
+          return_city: "Thamarassery",
+          return_phone: "7907154139",
           return_add:
-            "Florenza Italiya Near ABS Traders Kodakkad, Opp: Rifa Medical Center Kodakkad-Palakkad Kozhikode Highway",
+            "Tp10/51 andona, parappanpoyil (PO), Thamarassery, kozhikod, Kerala",
           return_state: "Kerala",
           return_country: "India",
           products_desc: order.orderItems
@@ -77,8 +76,8 @@ export async function POST(
           order_date: new Date(order.createdAt).toISOString().split("T")[0],
           total_amount: order.totalAmount.toString(),
           seller_add:
-            "Florenza Italiya Near ABS Traders Kodakkad, Opp: Rifa Medical Center Kodakkad-Palakkad Kozhikode Highway",
-          seller_name: "Florenza Italiya",
+            "Tp10/51 andona, parappanpoyil (PO), Thamarassery, kozhikod, Kerala",
+          seller_name: process.env.DELHIVERY_WAREHOUSE_NAME || "Mr Kitchen",
           seller_inv: `INV${order._id.toString()}`,
           quantity: totalQuantity.toString(),
           shipment_width: "100",
@@ -90,13 +89,13 @@ export async function POST(
         },
       ],
       pickup_location: {
-        name: "Florenza Italiya",
-        add: "Florenza Italiya Near ABS Traders Kodakkad, Opp: Rifa Medical Center Kodakkad-Palakkad Kozhikode Highway",
-        pin: "678583",
-        city: "Thachanattukara",
+        name: process.env.DELHIVERY_WAREHOUSE_NAME || "Mr Kitchen",
+        add: "Tp10/51 andona, parappanpoyil (PO), Thamarassery, kozhikod, Kerala",
+        pin: "673573",
+        city: "Thamarassery",
         state: "Kerala",
         country: "India",
-        phone: "9778766273",
+        phone: "7907154139",
       },
     };
     // --------------------------------------------
@@ -129,15 +128,22 @@ export async function POST(
         .flatMap((pkg: any) => pkg.remarks ?? [])
         .filter(Boolean);
 
+      let responseError = delhiveryResponse.error;
+      if (typeof responseError === 'boolean') {
+          responseError = responseError ? "Delhivery API Error (true)" : "";
+      } else if (typeof responseError === 'object') {
+          responseError = JSON.stringify(responseError);
+      }
+
       const message =
         remarks.length > 0
           ? remarks.join("; ")
-          : (delhiveryResponse.rmk ?? "Unknown error from Delhivery");
+          : (delhiveryResponse.rmk || responseError || "Unknown error from Delhivery");
 
       return NextResponse.json(
         {
           success: false,
-          message: "Delhivery shipment creation failed",
+          message: `Delhivery shipment creation failed: ${message}`,
           remarks, // <-- expose the exact remarks array
           delhiveryRaw: delhiveryResponse, // optional: full payload for debugging
         },

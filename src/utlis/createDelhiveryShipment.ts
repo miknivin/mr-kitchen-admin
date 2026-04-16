@@ -68,14 +68,7 @@ async function createDelhiveryShipment(token: any, shipmentData: any) {
 
     // Log success
 
-    // Validate response
-    if (!responseData.success) {
-      console.log(JSON.stringify(responseData));
-
-      throw new Error(
-        responseData.error || "Delhivery API returned unsuccessful response",
-      );
-    }
+    // removed throw on !responseData.success to let the caller handle it
 
     return responseData;
   } catch (error: any) {
@@ -84,11 +77,16 @@ async function createDelhiveryShipment(token: any, shipmentData: any) {
       `Failed to create shipment for order ${shipmentData.shipments[0]?.order}: ${error.message}`,
     );
 
-    // Handle specific Delhivery errors
     let errorMessage = error.message;
     if (error.response) {
+      let responseError = error.response.data?.error;
+      if (typeof responseError === 'boolean') {
+        responseError = responseError ? "Delhivery returned true for error without details" : "";
+      } else if (typeof responseError === 'object') {
+        responseError = JSON.stringify(responseError);
+      }
       errorMessage =
-        error.response.data?.error ||
+        responseError ||
         `Delhivery API error: ${error.response.status} - ${error.response.statusText}`;
     }
 
