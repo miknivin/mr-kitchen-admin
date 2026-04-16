@@ -56,34 +56,21 @@ const SessionStartedOrders = () => {
   const isLoading = searchQuery ? isLoadingSearch : isLoadingAll;
   const isError = searchQuery ? isErrorSearch : isErrorAll;
 
-  // Function to remove duplicates based on user and shippingInfo
-  const removeDuplicates = (
-    orders: SessionStartedOrder[],
-  ): SessionStartedOrder[] => {
-    const seen = new Set<string>();
-    return orders.filter((order) => {
-      const key = `${order.user.toString()}-${JSON.stringify(order.shippingInfo)}`;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
-  };
-
-  // Process orders (remove duplicates)
-  const uniqueOrders = useMemo(
-    () => (data?.data ? removeDuplicates(data.data) : []),
+  // All session orders — each has a unique razorpayOrderId, no deduplication needed
+  const sessionOrders = useMemo(
+    () => (data?.data ? data.data : []),
     [data]
   );
 
   // Update total items for pagination
   useEffect(() => {
-    setTotalItems(uniqueOrders.length);
-  }, [uniqueOrders]);
+    setTotalItems(sessionOrders.length);
+  }, [sessionOrders]);
 
   // Paginate the unique orders
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const paginatedOrders = uniqueOrders.slice(indexOfFirstItem, indexOfLastItem);
+  const paginatedOrders = sessionOrders.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleDelete = async () => {
     try {
@@ -222,7 +209,7 @@ const SessionStartedOrders = () => {
             ))}
           </tbody>
         </table>
-        {(!uniqueOrders || uniqueOrders.length === 0) && (
+        {(!sessionOrders || sessionOrders.length === 0) && (
           <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
             <p className="text-center text-gray-500 dark:text-gray-400">
               {searchQuery

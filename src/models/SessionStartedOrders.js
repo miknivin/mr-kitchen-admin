@@ -29,16 +29,16 @@ const sessionStartedOrderSchema = new mongoose.Schema(
       {
         name: { type: String, required: true },
         quantity: { type: Number, required: true },
-        image: { type: String, required: true },
+        image: { type: String, required: false, default: "" },
         variant: {
           type: String,
-          required: true,
+          required: false,
         },
         price: { type: String, required: true },
         discountPrice: { type: String, required: false },
         product: {
           type: mongoose.Schema.Types.ObjectId,
-          required: true,
+          required: false,
           ref: "products",
         },
       },
