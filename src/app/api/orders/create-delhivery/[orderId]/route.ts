@@ -64,7 +64,7 @@ export async function POST(
           return_city: "Thamarassery",
           return_phone: "7907154139",
           return_add:
-            "Tp10/51 andona, parappanpoyil (PO), Thamarassery, kozhikod, Kerala",
+            "Tp10/51 andona, parappanpoyil (PO), Thamarassery, Kozhikode, Kerala",
           return_state: "Kerala",
           return_country: "India",
           products_desc: order.orderItems
@@ -76,7 +76,7 @@ export async function POST(
           order_date: new Date(order.createdAt).toISOString().split("T")[0],
           total_amount: order.totalAmount.toString(),
           seller_add:
-            "Tp10/51 andona, parappanpoyil (PO), Thamarassery, kozhikod, Kerala",
+            "Tp10/51 andona, parappanpoyil (PO), Thamarassery, Kozhikode, Kerala",
           seller_name: process.env.DELHIVERY_WAREHOUSE_NAME || "Mr Kitchen",
           seller_inv: `INV${order._id.toString()}`,
           quantity: totalQuantity.toString(),
@@ -90,7 +90,7 @@ export async function POST(
       ],
       pickup_location: {
         name: process.env.DELHIVERY_WAREHOUSE_NAME || "Mr Kitchen",
-        add: "Tp10/51 andona, parappanpoyil (PO), Thamarassery, kozhikod, Kerala",
+        add: "Tp10/51 andona, parappanpoyil (PO), Thamarassery, Kozhikode, Kerala",
         pin: "673573",
         city: "Thamarassery",
         state: "Kerala",
@@ -130,9 +130,9 @@ export async function POST(
 
       let responseError = delhiveryResponse.error;
       if (typeof responseError === 'boolean') {
-          responseError = responseError ? "Delhivery API Error (true)" : "";
+        responseError = responseError ? "Delhivery API Error (true)" : "";
       } else if (typeof responseError === 'object') {
-          responseError = JSON.stringify(responseError);
+        responseError = JSON.stringify(responseError);
       }
 
       const message =
