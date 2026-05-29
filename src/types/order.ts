@@ -47,6 +47,9 @@ export interface Order {
   taxAmount: number;
   shippingAmount: number;
   totalAmount: number;
+  totalMRP?: number;
+  productDiscount?: number;
+  shippingDiscount?: number;
   couponApplied?: string; // default: "No"
   couponAppliedRef?: Types.ObjectId | string; // Reference to Coupon model
   couponDiscount?: number; // default: 0

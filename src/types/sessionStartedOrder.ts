@@ -43,6 +43,9 @@ export interface SessionStartedOrder {
   paymentInfo?: PaymentInfo;
   itemsPrice: number;
   totalAmount: number;
+  totalMRP?: number;
+  productDiscount?: number;
+  shippingDiscount?: number;
   orderNotes?: string;
   deliveredAt?: Date | string;
   createdAt: Date | string;

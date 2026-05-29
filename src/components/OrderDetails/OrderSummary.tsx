@@ -12,31 +12,62 @@ const OrderSummary: React.FC<{ order: Order }> = ({ order }) => {
         Summary
       </h3>
       <div className="flex w-full flex-col items-center justify-center space-y-4 border-b border-gray-200 pb-4 dark:border-gray-700">
+        {order.totalMRP != null && (
+          <div className="flex w-full justify-between">
+            <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
+              Actual Price (MRP)
+            </p>
+            <p className="text-base leading-4 text-gray-600 dark:text-gray-300">
+              ₹{safe(order.totalMRP)}
+            </p>
+          </div>
+        )}
         <div className="flex w-full justify-between">
           <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
-            Subtotal
+            Discount Price
           </p>
           <p className="text-base leading-4 text-gray-600 dark:text-gray-300">
             ₹{safe(order.itemsPrice)}
           </p>
         </div>
-        <div className="flex w-full items-center justify-between">
-          <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
-            Shipping
-          </p>
-          <p className="text-base leading-4 text-gray-600 dark:text-gray-300">
-            ₹{safe(order.shippingAmount)}
-          </p>
-        </div>
-
-        <div className="flex w-full items-center justify-between">
-          <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
-            Tax
-          </p>
-          <p className="text-base leading-4 text-gray-600 dark:text-gray-300">
-            ₹{safe(order.taxAmount)}
-          </p>
-        </div>
+        {order.productDiscount != null && order.productDiscount > 0 && (
+          <div className="flex w-full justify-between">
+            <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
+              You Saved
+            </p>
+            <p className="text-base leading-4 text-green-500">
+              - ₹{safe(order.productDiscount)}
+            </p>
+          </div>
+        )}
+        {order.shippingDiscount != null && order.shippingDiscount > 0 && (
+          <>
+            <div className="flex w-full justify-between">
+              <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
+                Shipping Fee
+              </p>
+              <p className="text-base leading-4 text-gray-600 dark:text-gray-300">
+                + ₹{safe(order.shippingDiscount)}
+              </p>
+            </div>
+            <div className="flex w-full justify-between">
+              <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
+                Subtotal
+              </p>
+              <p className="text-base leading-4 text-gray-600 dark:text-gray-300">
+                ₹{(Number(order.itemsPrice ?? 0) + Number(order.shippingDiscount)).toFixed(2)}
+              </p>
+            </div>
+            <div className="flex w-full justify-between">
+              <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
+                Shipping Discount
+              </p>
+              <p className="text-base leading-4 text-green-500">
+                - ₹{safe(order.shippingDiscount)}
+              </p>
+            </div>
+          </>
+        )}
         {order?.couponApplied !== "No" && (
           <div className="flex w-full items-center justify-between">
             <p className="text-base leading-4 text-gray-800 dark:text-gray-100">
@@ -50,7 +81,7 @@ const OrderSummary: React.FC<{ order: Order }> = ({ order }) => {
       </div>
       <div className="flex w-full items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
         <p className="text-base font-semibold leading-4 text-gray-800 dark:text-gray-100">
-          Total
+          Final Payable Amount
         </p>
         <p className="text-base font-semibold leading-4 text-gray-600 dark:text-gray-300">
           ₹{safe(order.totalAmount)}

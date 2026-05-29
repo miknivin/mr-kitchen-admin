@@ -10,7 +10,7 @@ export interface Product {
   shortDescription: string;
   features: string[];
   variants: Array<{
-    size: "85ml" | "500ml" | "600ml" | "2L" | "12ml" | "20ml" | "30ml" | "50ml" | "100ml" | "150ml" | "50g" | "100g" | "200g" | "500g" | "1kg";
+    size: "85ml" | "500ml" | "600ml" | "650ml" | "2L" | "12ml" | "20ml" | "30ml" | "50ml" | "100ml" | "150ml" | "50g" | "100g" | "200g" | "500g" | "1kg";
     price: number;
     discountPrice: number | null;
     imageUrl?: string[];
