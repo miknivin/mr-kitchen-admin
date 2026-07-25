@@ -2,8 +2,7 @@ import { NextResponse } from "next/server";
 import Order from "@/models/Order";
 import dbConnect from "@/lib/db/connection";
 
-// Server-side token (store in environment variables for security)
-const API_TOKEN = process.env.GSHEET_API_TOKEN || "your-static-token-here";
+const API_TOKEN = process.env.GSHEET_API_TOKEN;
 
 // Middleware to verify token
 async function verifyToken(req) {

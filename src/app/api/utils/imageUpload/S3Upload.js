@@ -13,8 +13,7 @@ export async function uploadFilesToS3(files) {
     throw new Error("No files provided");
   }
 
-  const CLOUDFRONT_DOMAIN =
-    process.env.CLOUDFRONT_DOMAIN || "https://d229x2i5qj11ya.cloudfront.net";
+  const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN;
   const CF_BASE = CLOUDFRONT_DOMAIN.endsWith("/")
     ? CLOUDFRONT_DOMAIN
     : `${CLOUDFRONT_DOMAIN}/`;

@@ -14,9 +14,8 @@ const s3Client = new S3Client({
 // Supported image formats
 const ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "webp"];
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
-const BUCKET_NAME = process.env.AWS_BUCKET_NAME || "kids-bags";
-const CLOUDFRONT_DOMAIN =
-  process.env.CLOUDFRONT_DOMAIN || "https://d229x2i5qj11ya.cloudfront.net";
+const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
+const CLOUDFRONT_DOMAIN = process.env.CLOUDFRONT_DOMAIN;
 
 export async function POST(request) {
   try {

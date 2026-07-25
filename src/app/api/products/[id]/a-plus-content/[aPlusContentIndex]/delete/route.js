@@ -7,7 +7,7 @@ import { invalidateProductCache } from "@/lib/cacheInvalidator";
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION || "eu-north-1", // Updated region
+  region: process.env.AWS_REGION,
 });
 
 const s3 = new AWS.S3();
@@ -48,7 +48,7 @@ export async function POST(request, { params }) {
     const fileKey = image.public_id; // public_id is the S3 key
     await s3
       .deleteObject({
-        Bucket: process.env.AWS_BUCKET_NAME || "kids-bags", // Updated bucket name
+        Bucket: process.env.AWS_BUCKET_NAME,
         Key: fileKey,
       })
       .promise();

@@ -93,7 +93,7 @@ export async function POST(
           weight: weight.toString(),
           shipping_mode: "Surface",
           address_type: "home",
-          seller_gst: process.env.GSTNO || "32AAIFO0471H1ZI",
+          seller_gst: process.env.GSTNO,
         },
       ],
       pickup_location: {
@@ -104,7 +104,7 @@ export async function POST(
         state: "Kerala",
         country: "India",
         phone: "7907154139",
-        gst: process.env.GSTNO || "32AAIFO0471H1ZI",
+        gst: process.env.GSTNO,
       },
     };
 
