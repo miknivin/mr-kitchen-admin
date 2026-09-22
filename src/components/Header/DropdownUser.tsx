@@ -1,10 +1,11 @@
-"use client;";
+"use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
 import { useDispatch, useSelector } from "react-redux";
-import { useLazyLogoutQuery } from "@/redux/api/authApi";
+import { authApi, useLazyLogoutQuery } from "@/redux/api/authApi";
+import { userApi } from "@/redux/api/userApi";
 import { useRouter } from "next/navigation";
 import { setUser, setIsAuthenticated } from "@/redux/features/userSlice";
 
@@ -15,14 +16,30 @@ const DropdownUser = () => {
   const user = useSelector((state: any) => state.auth.user);
   const dispatch = useDispatch();
   const router = useRouter();
-  const handleLogout = () => {
-    triggerLogout(null);
+
+  const handleLogout = async () => {
+    try {
+      await triggerLogout(null).unwrap();
+    } catch (error) {
+      console.log("Logout error:", error);
+    } finally {
+      dispatch(setUser(null));
+      dispatch(setIsAuthenticated(false));
+      dispatch(userApi.util.resetApiState());
+      dispatch(authApi.util.resetApiState());
+      router.push("/");
+      router.refresh();
+    }
   };
+
   useEffect(() => {
     if (isSuccess) {
       dispatch(setUser(null));
       dispatch(setIsAuthenticated(false));
+      dispatch(userApi.util.resetApiState());
+      dispatch(authApi.util.resetApiState());
       router.push("/");
+      router.refresh();
     }
   }, [dispatch, isSuccess, router]);
 
